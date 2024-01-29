@@ -1,4 +1,5 @@
 import { model, Schema } from 'mongoose';
+import mongoosePaginate from 'mongoose-paginate-v2';
 
 const receptorSchema = new Schema({
     nombre_receptor: {
@@ -15,4 +16,5 @@ const receptorSchema = new Schema({
     }
 });
 
+receptorSchema.plugin(mongoosePaginate);
 export const Receptor = model('Receptor', receptorSchema);

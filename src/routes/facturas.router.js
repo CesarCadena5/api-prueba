@@ -12,47 +12,6 @@ import { existeFactura } from "../helpers/existeFactura.js";
 
 export const routerFacturas = express.Router();
 
-// Validar token
-// routerPrincipal.post('/validar-token', validarToken, (req, res, next) => {
-//     return res.json({
-//         ok: true,
-//         usuario: req.usuarioAuth
-//     });
-// });
-
-// Agregar proveedor POST
-// routerPrincipal.post('/proveedores', [
-//     validarToken,
-//     check('nombre', 'El nombre es requerido.').notEmpty().escape(),
-//     check('celular', 'El celular es obligatorio.').notEmpty().escape(),
-//     validarCampos
-// ], agregarProveedor);
-
-// // Obtener proveedores GET
-// routerPrincipal.get('/proveedores', validarToken, listarProveedores);
-
-// // Obtener un proveedor GET
-// routerPrincipal.get('/proveedor/:id', [
-//     validarToken,
-//     check('id').custom((id) => validarId(id)),
-//     validarCampos
-// ], obtenerProveedor);
-
-// // Actualizar proveedor PUT
-// routerPrincipal.put('/proveedor/:id', [
-//     validarToken,
-//     check('id').custom((id) => validarId(id)),
-//     validarCampos
-// ], actualizarProveedor);
-
-// // Eliminar proveedor DELETE
-// routerPrincipal.delete('/proveedor/:id', [
-//     validarToken,
-//     check('id').custom((id) => validarId(id)),
-//     validarCampos
-// ], eliminarProveedor);
-
-
 // Facturas
 
 // Crear factura POST
@@ -71,18 +30,21 @@ routerFacturas.post('/crear', [
     validarCampos
 ], crearFactura);
 
+// Editar factura PUT
 routerFacturas.put('/editar/:id', [
     validarToken,
     check('id').custom(validarIdFactura),
     validarCampos
 ], editarFactura);
 
+// Ver factura get
 routerFacturas.get('/ver/:id', [
     validarToken,
     check('id').custom(validarIdFactura),
     validarCampos
 ], verFactura);
 
+// Lista facturas get
 routerFacturas.get('/lista', [
     validarToken,
 ], listarFacturas);

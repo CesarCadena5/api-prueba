@@ -1,4 +1,5 @@
 import { model, Schema } from 'mongoose';
+import mongoosePaginate from 'mongoose-paginate-v2';
 
 const emisorSchema = new Schema({
     nombre_emisor: {
@@ -14,5 +15,7 @@ const emisorSchema = new Schema({
         lowercase: true
     }
 });
+
+emisorSchema.plugin(mongoosePaginate);
 
 export const Emisor = model('Emisor', emisorSchema);

@@ -107,7 +107,7 @@ export const editarFactura = async (req, res) => {
 
             const receptor = await Receptor.findOne(filtro);
             if (receptor) {
-                dataFactura.emisor = receptor;
+                dataFactura.receptor = receptor;
             } else {
                 return res.status(422).json({
                     msg: 'No existe el receptor, verifique'
@@ -115,11 +115,12 @@ export const editarFactura = async (req, res) => {
             }
         }
 
-        await Facturas.findByIdAndUpdate(id, dataFactura);
+        const factura = await Facturas.findByIdAndUpdate(id, dataFactura);
 
         return res.json({
             msg: `Se actualizó la factura ${id}`,
-            icon: 'success'
+            icon: 'success',
+            data: factura
         });
     } catch (error) {
         console.log(error.message)
@@ -134,7 +135,8 @@ export const verFactura = async (req, res) => {
     const { id } = req.params;
 
     try {
-        const factura = await Facturas.findById(id);
+        const factura = await Facturas.findById(id).populate({ path: 'emisor' })
+            .populate({ path: 'receptor' });;
 
         if (!factura) {
             return res.status(404).json({

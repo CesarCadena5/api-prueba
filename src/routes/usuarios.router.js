@@ -36,3 +36,11 @@ routerUsuarios.post('/login', [
     check('password', 'La contraseña es requerida').notEmpty().escape(),
     validarCampos
 ], login);
+
+// Validar token
+routerUsuarios.post('/validar-token', validarToken, (req, res, next) => {
+    return res.json({
+        ok: true,
+        usuario: req.usuarioAuth
+    });
+});
