@@ -37,7 +37,6 @@ export const crearFactura = async (req, res) => {
             icon: 'success'
         });
     } catch (error) {
-        console.log(error.message);
         return res.status(500).json({
             error: 'Hubo un error al crear la factura.',
             icon: 'error'
@@ -94,7 +93,8 @@ export const editarFactura = async (req, res) => {
                 dataFactura.emisor = emisor;
             } else {
                 return res.status(422).json({
-                    msg: 'No existe el Emisor, verifique'
+                    msg: 'No existe el Emisor, verifique',
+                    icon: 'error'
                 });
             }
         }
@@ -110,7 +110,8 @@ export const editarFactura = async (req, res) => {
                 dataFactura.receptor = receptor;
             } else {
                 return res.status(422).json({
-                    msg: 'No existe el receptor, verifique'
+                    msg: 'No existe el receptor, verifique',
+                    icon: 'error'
                 });
             }
         }
@@ -123,7 +124,6 @@ export const editarFactura = async (req, res) => {
             data: factura
         });
     } catch (error) {
-        console.log(error.message)
         return res.status(500).json({
             msg: 'Ocurrió un error al actualizar la factura',
             icon: 'error'
@@ -160,12 +160,12 @@ export const verFactura = async (req, res) => {
 };
 
 export const listarFacturas = async (req, res) => {
-    const { limite = 5, pagina = 1, busqueda = '', orden = 'desc', campoOrden = 'numero_factura' } = req.query;
+    const { limite = 5, pagina = 1, busqueda = '', campoOrden = 'numero_factura' } = req.query;
     let facturas = null;
 
     const sortConfig = {};
-    sortConfig[campoOrden] = orden === 'asc' ? 1 : -1;
-
+    sortConfig[campoOrden] = 'asc';
+    console.log(sortConfig);
     try {
         if (busqueda === '') {
             facturas = await Facturas.paginate({}, { limit: parseInt(limite), sort: sortConfig, page: parseInt(pagina), populate: [{ path: 'emisor' }, { path: 'receptor' }] });
@@ -189,6 +189,28 @@ export const listarFacturas = async (req, res) => {
         console.log(error.message)
         return res.status(500).json({
             msg: 'Ocurrió un error al listar las facturas',
+            icon: 'error'
+        });
+    }
+};
+
+export const eliminarFactura = async (req, res) => {
+    const { id } = req.params;
+    const { pagina = 1 } = req.query;
+
+    try {
+        const facturas = await Facturas.paginate({}, { limit: 4, page: parseInt(pagina), populate: [{ path: 'emisor' }, { path: 'receptor' }] });
+
+        await Facturas.findByIdAndDelete(id);
+
+        return res.json({
+            msg: 'Factura eliminada correctamente.',
+            icon: 'success',
+            data: facturas
+        });
+    } catch (error) {
+        return res.status(500).json({
+            msg: 'Ocurrió un error al eliminar la Factura',
             icon: 'error'
         });
     }

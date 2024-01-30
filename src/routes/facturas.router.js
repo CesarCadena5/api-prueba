@@ -5,7 +5,7 @@ import { validarFecha } from "../helpers/validarFecha.js";
 import { validarToken } from "../middlewares/validarToken.js";
 import { existeReceptor } from "../helpers/existeReceptor.js";
 import { validarCampos } from "../middlewares/validarCampos.js";
-import { crearFactura, editarFactura, listarFacturas, verFactura } from "../controllers/facturaController.js";
+import { crearFactura, editarFactura, eliminarFactura, listarFacturas, verFactura } from "../controllers/facturaController.js";
 import { existeNit } from "../helpers/existeNit.js";
 import { validarIdFactura } from "../helpers/validarIdFactura.js";
 import { existeFactura } from "../helpers/existeFactura.js";
@@ -48,4 +48,11 @@ routerFacturas.get('/ver/:id', [
 routerFacturas.get('/lista', [
     validarToken,
 ], listarFacturas);
+
+// Ver factura get
+routerFacturas.delete('/eliminar/:id', [
+    validarToken,
+    check('id').custom(validarIdFactura),
+    validarCampos
+], eliminarFactura);
 

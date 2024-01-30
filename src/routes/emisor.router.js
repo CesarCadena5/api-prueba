@@ -2,8 +2,9 @@ import express from "express";
 import { check } from "express-validator";
 import { validarToken } from "../middlewares/validarToken.js";
 import { validarCampos } from "../middlewares/validarCampos.js";
-import { crearEmisor, listarEmisores, listarEmisoresSelect } from "../controllers/emisorController.js";
+import { validarIdEmisorReceptor } from "../helpers/ValidarIdEmisorReceptor.js";
 import { validarNitEmisor, validarNombreEmisor } from "../helpers/validarDatosEmisor.js";
+import { actualizarEmisor, crearEmisor, eliminarEmisor, listarEmisores, listarEmisoresSelect, obtenerEmisor } from "../controllers/emisorController.js";
 
 export const routerEmisor = express.Router();
 
@@ -24,3 +25,24 @@ routerEmisor.get('/lista', [
 routerEmisor.get('/listar', [
     validarToken,
 ], listarEmisores);
+
+// Obtener un emisor GET
+routerEmisor.get('/ver/:id', [
+    validarToken,
+    check('id').custom((id) => validarIdEmisorReceptor(id)),
+    validarCampos
+], obtenerEmisor);
+
+// Actualizar emisor PUT
+routerEmisor.put('/editar/:id', [
+    validarToken,
+    check('id').custom((id) => validarIdEmisorReceptor(id)),
+    validarCampos
+], actualizarEmisor);
+
+// Eliminar emisor DELETE
+routerEmisor.delete('/eliminar/:id', [
+    validarToken,
+    check('id').custom((id) => validarIdEmisorReceptor(id)),
+    validarCampos
+], eliminarEmisor);
